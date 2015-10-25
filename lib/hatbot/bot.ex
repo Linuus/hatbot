@@ -24,6 +24,14 @@ defmodule Hatbot.Bot do
     {:ok, state}
   end
 
+  def handle_message(message = %{type: "message", text: "hatbot crash"}, slack, state) do
+    raise("Crash boom bang!")
+  end
+
+  def handle_message(message = %{type: "message", text: "hatbot stats"}, slack, state) when state == %{} do
+    send_message("My hat is empty... I have no stats to give you.", message.channel, slack)
+    {:ok, state}
+  end
   def handle_message(message = %{type: "message", text: "hatbot stats"}, slack, state) do
     adders = Enum.map(state, fn {_, {name, _}} -> name end) |> Enum.join(", ")
     response = """
